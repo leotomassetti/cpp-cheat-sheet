@@ -1,0 +1,266 @@
+Class: template for objects, and an object is an instance of a class
+Constructor: to initialize an object. Default, Parameterized, Copy.
+Destructors: Resource Deallocation, Cleanup. 
+------------------------------------------------------------------
+Encapsulation: bundling data and functions, data Protection, information Hiding.
+Access Specifiers: 
+Public: Anywhere by anyone 
+Protected: only inside and by inside derived class
+Private:  only inside, except friend class & functio
+------------------------------------------------------------------
+Polymorphism: have different functionality from a common interface.
+Compile-Time: Overloading Function, Operator
+Static binding: Call only the object defined
+Run-Time: Function overriding (virtual), derived class defines the same method. 
+Dynamic binding: Use virtual func
+Using ”override” hides all other overloads func
+Final: derived class cannot override it or inherit all
+------------------------------------------------------------------
+Inheritance:  class can derive properties and characteristics from another class. Reusability
+Public: Public, Protected, Private
+Protected: Protected, Protected, Private
+Private: Private, Private, Private
+Resurecting: allow access derived to base
+using Base::var_name OR func_name
+Virtual with defaults: Vals from base, call derived
+Base* base = dynamic_cast<Derived*>(derived);
+typeid(*var_name).name()//gets the class name
+------------------------------------------------------------------
+Abstraction: displaying only essential info and hiding the details, interface
+Abstract can only be used as base classes. Thus, they are allowed to have virtual member functions without definitions.
+------------------------------------------------------------------
+Literals: stored directly in the binary code, fixed value, ex: unsigned long int varname {555UL}
+Modifiers: Short, long(L), long long(LL), signed, unsigned(U), static
+Qualifiers: modify the properties of data types
+-Const: cannot be changed (immutble)
+Const member function: don’t allow to change the member data (not alowd with static,const,ref)
+-Volatile: might change unexpectedly (compiler not to optimize code)
+-Mutable: allows class member to be modified even it’s access method is declared as const
+-Constinit: var should be init at compile time, to avoid problems with order init of global vars
+-Constexp: evaluated at compile time, are implicitly inline
+-Consteval: evaluated at compile-time, reducing runtime function calls, more optimizations
+------------------------------------------------------------------
+*dereference & ampersand \backslash ;semicolon
+Arrendondar: narrowing  : colon
+static_cast<TYPE> or (TYPE) C-cast style
+size_t = unsigned Int
+std::size(array) ou sizeof(array)/sizeof(array[0])
+C-String is terminated with ‘\0’
+std::string_view: read-only pointer to a char array
+Source-Preprocess-TranslatioUnit-Compilation-Obj-Linker-Binary
+------------------------------------------------------------------
+Bitwise operators
+-Shifting: Only for integrals (int, char): 
+Right: var >> n divides var by 2ˆn
+Left: var << n multiplies var by 2ˆn
+-Logical: AND &, OR |, NOT ~, XOR ^(0110)
+-Masks: set:|=mask, reset:&=~mask, check=& mask >>n, toggle(change):^=mask 
+------------------------------------------------------------------
+Pointers
+const: immutability. Applies to the thing left of it, if there's nothing on the left, then it applies to the thing right of it
+-const Pointer: type* const p_var: cannot point somewhere else, can modify the value pointing to
+-Pointer to const: const type* p_var: cannot modify val pointing to, can point somewhere else
+-const Pointer to const: const type* const p_var
+both content and the address are read-only, equivalent to int const* const
+int const* const*: a pointer to a const pointer to a constant integer
+Arithmetic: 
+increment/decrement the pointer to navigate through the addresses  
+std::ptrdiff_t type of pointers differences
+>, < >=, <= compare adresses 
+------------------------------------------------------------------
+Pass value: copy the values
+Pass by reference: cant be NULL, cant be moved/reassinged
+swap(a, b);/arguments
+void swap(int& x, int& y)
+    int z = x; x = y; y = z;
+Pass by pointer: can be NULL, can be moved/reassinged
+swap(&a, &b);//addresses
+void swap(int *x, int *y)
+    int z = *x; *x = *y; *y = z;
+Pass sized Array br reference:
+int sum(int(&arr)[size])//size is valid
+  for(size_t i{};i<std::size(arr);++i)//std:size OK
+int sum(int arr[size])//decaid pointer,sizeNO
+  std::size(arr)// std:size NotOK
+------------------------------------------------------------------
+Smart Pointer - template class with operator overloads to improve mem management & safety
+#include <memory> C++ 11, 14, 17
+std::unique_ptr<T> OR make_unique<T>
+reset, move, reset(from managed mem), can only be passed by ref 
+std::shared_ptr<T> OR make_shared<T>
+reset, copy constr, count of # of copies (do not return by ref-does not increment counter)
+std::weak_ptr<T> type of shared_ptr, donot increase count, used for circular reference (lock),  
+do not own the data (can’t read or modify them) convert to shared: shared_ptr pc = p_weak.lock()
+------------------------------------------------------------------
+Stack: local vars, functions, calls. Scope lifetime
+Heap: Additional mem required run time, dynamic
+Dev controls lifetime by new and delete
+Memory leak: not deleting or point to other mem
+------------------------------------------------------------------
+Enum: Do not implicit convert!
+enum class Month{Jan,Feb};
+Month month {Month::Feb};
+static_cast<int>(month)
+------------------------------------------------------------------
+Type aliases
+using HugeInt = unsigned long long int;
+typedef unsigned long long int HugeInt;
+------------------------------------------------------------------
+Optional: include<optional> Cpp+17
+std::optional<type> name{std::nullopt}
+name.has_value(); name.value();
+name.value_or(other_val);
+------------------------------------------------------------------
+Concepts: placing constaints on template type parameters
+template (typename T)
+Require std::integral<T>
+T add (T a, T b){return a+b}. OR
+template (std::integral T)
+T add (T a, T b){return a+b}
+------------------------------------------------------------------
+Constructors:
+Default: Dog()=default;
+Initializer list: Dog(int a, int b):m_a(a), m_b(b);
+Delegation: Dog(int a):Dog(int a, int b=0);
+Shallow copy: default copy all also mem pointer
+Deep copy: redefine to create new memories
+Move:
+Dog::Dog(Dog&& s_dog):
+a(s_dog.geta()),
+b(s_dog.getb()){s_dog.invalidate()} OR
+Dog dog2(std::move(Dog(1,2)));
+Delete: Dog() = delete; disable a constructor
+Custom with derived: Pet(int c):Dog(int a, int b)
+------------------------------------------------------------------
+Range base for loops makes copies for each iteration. So use references
+For(Dog& d : dogs){d//is a reference}
+Objects stored in arrays are copies:
+Dog dogs[]{d1,d2,d3};
+Designated initializer: Dog dog{.a=1,.b=2}C++20
+------------------------------------------------------------------
+Friend func: let external func to access to private
+Friend class: let exter class to access to private
+------------------------------------------------------------------
+Specifier: Static Belongs to the class not object.
+Static members: initialized before the object and main func. Belongs to the class not object.
+Inline Static members: IS initializade inside the class (Integral type) C++17 static inline PI{3.}
+Static member functions: Don’t have access to private vars, but only to static member vars.
+Extern: accessed from other files
+------------------------------------------------------------------
+Lambda functions: anonymous func (no name)
+are implemented as functors
+auto name = [capture list] (params) ->resultType
+{body}; “->resultType” is optional
+[capture list] (params) ->resultType
+{body}(); called instantly
+[capture list]:access vars outside the scope
+By value are copies: [varName], [=] all used
+By reference: [&varName], [&] all used
+------------------------------------------------------------------
+Move semantics: Avoid unnecessary copies and mem allocations, steal data. INVALIDATE source!
+Lvalues: long term mem, can grab address & use
+Rvalues: temporary mem, quickly destroyed
+  int&& resp = x+y;//extends temp resp lifetime, avoid copy
+std::move doesn’t move, only casts to an Rvalue
+moving is by construction/assign obj from Rvalue
+------------------------------------------------------------------
+Function like Entities: Helper func is a callback
+(event based apps)
+Function Pointer: to pass func as func parameter
+respType (*f_ptr) (paramsType) = &funcNameOR
+respType (*f_ptr) (paramsType) = funcName OR
+auto f_ptr = &funcName OR
+auto f_ptr = funcName
+Functors object that can be called like functions
+class className
+   public: retType operator()(params){ body}
+std::plus<type>, std::minus<type>,std::less<type> 
+std::function<respType(paramsType)>funcName
+abstract all callbacks (Fun Pointer, functor, lamb)
+Iterators: pointer-like object that points to an element of container to traverse it
+iterator it = container.begin()
+const_iterator it = container.begin()
+------------------------------------------------------------------
+Thread: <thread>
+std::thread t1(func_name, params)
+t1.join() OR jthread t2 doesn’t need join
+Mutexes: 
+std::mutex  synchronization primitive used to protect shared data. m.lock(), unlock()
+std::scoped_lock mutex wrapper RAII-style mechanism for owning a mutex for the duration of a scoped block. std::lock_guard<std::mutex> lock(mutex);
+unique_lock deferred locking, time-constrained attempts at locking, recursive locking, transfer of lock ownership (move), with condition variables.
+Resource Acquisition Is Initialization: binds the life cycle of a resource that must be acquired before use to the lifetime of an object.
+Atomic: include <atomic>read-modify-wright are a single operation, so 2 threads can’t interleave for bool and all integral types
+Data Races occur when two or more threads access a common memory location simultaneously and at least one of them modifies the data resulting  
+in undefined corrupt data at that memory location.
+Deadlock: two or more blocked threads are waiting for each other to release a resource such as a mutex, which never gets released
+Mutexes: protect shared resources, binary flag to protect a shared resource by mutual exclusion
+Semaphore: controlling access, by multiple processes, to a common resource via signaling
+Producer–consumer: share of a common buffer (fixed-size) used as a queue. Use signal: std::condition_variable cv
+std::unique_lock<std::mutex> lck(mtx);
+while(meal == 0) cv.wait(lck);
+cv.notify_one();
+Pool: set of pre-created threads can be reused minimize the overhead creation and destruction
+- vector of worker threads, a task queue, a mutex for synchronization, a condition variable for signaling, and a boolean flag to indicate whether the pool should stop.
+- worker threads are initialized by the constructor,
+------------------------------------------------------------------
+SOLID Principles
+Single Responsibility: Class one job only(small)
+Open-Closed: open for extension but closed for modification (use inheritance, interfaces:Abst clas)
+Liskov Substitution: every derived class should be substitutable for their base (use inheritance)
+Interface Segregation: client should never be forced to implement an interface that doesn’t use
+Dependency Inversion: Entities must depend on abstractions, not on concretions (use interfaces)
+------------------------------------------------------------------
+Creational Patterns
+Abstract Factory: defines an interface for creating all distinct products but leaves the actual product creation to concrete factory classes
+Builder: need to create an object with lots of possible configuration options
+Singleton : ensures that only one object of its kind exists and provides a single point of access to it for any other code.
+Structural Patterns
+Adapter: which allows incompatible objects to collaborate. acts as a wrapper between two objects. It catches calls for one object and transforms them to format and interface recognizable by the second object
+Façade: provides a simplified (but limited) interface to a complex system of classes, library or framework.
+Behavioral Patterns
+Command: converts requests or simple operations into objects. allows deferred or remote execution of commands, storing command history, etc.Ex callbacks to parameterizing UI elements with actions
+Observer: allows some objects to notify other objects about changes in their state. provides a way to subscribe and unsubscribe to and from these events for any object that implements a subscriber interface.
+------------------------------------------------------------------
+Git
+init , clone [url], status, add [file], reset [file], diff
+git commit -m “message”, fetch, merge, log, push, pull, stash, branch , checkout
+------------------------------------------------------------------
+Code Profiling:
+Sampling: Valgrind, Vtune, 
+Instrumentation: Callgrind, Gprof, Tracy
+Visual Studio: Diagnostic tools: CPU & Memory Usage, 
+------------------------------------------------------------------
+Testing:
+Visual Studio: 
+MS Unit Test Framework, CodeLens C++, Nunit C#. Stub subs class, Shims divert calls to target
+Link to object or lib, if code do not export the func
+TEST_CLASS & TEST_METHOD
+Assert::AreEqual, Fail, Coverage
+DevOps
+DevOps: Conceps+Tools+Practices
+Shared responsibilities collaboration (Development and Operations) 
+Plan: Agile: Backlog, Sprint planning, task estimation (feedback of features/ prototype)
+Coding: Git Repository 
+Build: Maven/Gradle
+Testing: QA: Cucumber/Selenium
+Integrate(Release/Deploy): Bamboo
+Operate: Docker/Kubernets
+Monitor: Splunk
+Atlassian: Jira, Bitbucket, CICD (Agent)
+Github: Board, repos, backlog (PR, Code review), Pipeline – events (PR, automated)
+CI: script: Actions : Yaml file scripts: jobs, steps, repo actions, run cmd
+Runners (virtual machines to run workflows. contains an environment of tools, packages, and settings available for GitHub Actions to use.)
+Saves the artifacts (builds)
+CD: Deploy to Dev env to test
+Microsoft Azure (Cloud Platform): 
+Hosting services and Storage
+------------------------------------------------------------------
+Test: Unit, Component (isolated), Integration (Black/White box), End-to-End (Performance, Regression, Security), Manual
+------------------------------------------------------------------
+REST is an architectural style, any web service following REST architecture is called
+RESTFul Web Service. 
+CRUD (Create, Retrieve, Update, Delete).
+SOAP is a protocol, a set of rules which must be followed while I creating a web service
+------------------------------------------------------------------
+
+
